@@ -51,6 +51,13 @@ const TableUsers = (props)=>{
         setIsShowModalEdit(false)
     }
 
+    const handleDeleteUserFromModal = (user)=>{
+        let newListUser = listUser.filter((item)=>{
+            return item.id !== user.id
+        })
+        setListUser(newListUser)
+    }
+
     useEffect(()=>{
         getUser(1)
     },[])
@@ -124,7 +131,7 @@ const TableUsers = (props)=>{
         />
         <ModalAddNew show={isShowModalAddNew} handleClose={handleClose} handleUpdateTable={handleUpdateTable}/>
         <ModalEditUser show={isShowModalEdit} handleClose={handleClose} dataUserEdit={dataUserEdit} handleEditUserFromModal={handleEditUserFromModal}/>
-        <ModalDeleteUser show={isShowModalDelete} handleClose={handleClose} dataUserDelete={dataUserDelete}/>
+        <ModalDeleteUser show={isShowModalDelete} handleClose={handleClose} dataUserDelete={dataUserDelete} handleDeleteUserFromModal={handleDeleteUserFromModal}/>
     </>
     )
 }
