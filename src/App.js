@@ -1,23 +1,29 @@
 import './App.scss';
 import Header from './components/Header';
 import TableUsers from './components/TableUsers';
-import ModalAddNew from './components/ModalAddNew';
-import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 function App() {
-  const[isShowModalAddNew, setIsShowModalAddNew] = useState(false)
-  const handleClose = ()=>{
-    setIsShowModalAddNew(false)
-  }
+  
   return (
     <div className='app-container'>
       <Header/>
-      <div className='my-3 d-flex justify-content-between'>
-        <span><b>List user</b></span>
-        <button onClick={()=>{setIsShowModalAddNew(true)}} className='btn btn-success'>Add new user</button>
-      </div>
+      
       <TableUsers/>
-      <ModalAddNew show={isShowModalAddNew} handleClose={handleClose}/>
+      
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+/>
     </div>
   );
 }

@@ -1,24 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { createUser } from '../services/UserService';
+import { updateUser } from '../services/UserService';
 import{toast} from 'react-toastify'
-const ModalAddNew = (props)=>{
-    const{show,handleClose,handleUpdateTable} = props
+const ModalEditUser = (props)=>{
+    const{show,handleClose,dataUserEdit,handleEditUserFromModal} = props
     const [name,setName]=useState('')
     const [job,setJob]=useState('')
     
-    const handleSaveUser= async()=>{
-      let res = await createUser(name,job)
-      if(res && res.id){
-        handleClose();
-        setName('')
-        setJob('')
-        toast.success('Thêm thành công user')
-        handleUpdateTable({first_name:res.name, id: res.id})
+    const handleEditUser = async()=>{
+      let res = await updateUser(name,job)
+      if(res&& res.updatedAt){
+        handleEditUserFromModal({
+          first_name:name,
+          id:dataUserEdit.id
+        })
       }
-        
     }
+
+    useEffect(()=>{
+      setName(dataUserEdit.first_name)
+      setJob(dataUserEdit.job)
+    },[dataUserEdit])
+
     return(
         <>
             <Modal show={show} onHide={handleClose}>
@@ -51,12 +55,12 @@ const ModalAddNew = (props)=>{
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={()=>{handleSaveUser()}}>
-            Save Changes
+          <Button variant="primary" onClick={()=>{handleEditUser()}}>
+           Confirm
           </Button>
         </Modal.Footer>
       </Modal>
         </>
     )
 }
-export default ModalAddNew
+export default ModalEditUser

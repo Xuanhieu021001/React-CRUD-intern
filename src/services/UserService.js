@@ -5,6 +5,17 @@ const fetchAllUser = (page)=>{
     )
 }
 
+const createUser = (name,job)=>{
+  return (
+    axios.post(`/api/users`,{name,job})
+  )
+}
+const updateUser = (name,job)=>{
+  return (
+    axios.put(`/api/users/2`,{name,job})
+  )
+}
+
 axios.interceptors.response.use(function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
@@ -14,4 +25,4 @@ axios.interceptors.response.use(function (response) {
     // Do something with response error
     return Promise.reject(error);
   });
-export{fetchAllUser}
+export{fetchAllUser,createUser,updateUser}
