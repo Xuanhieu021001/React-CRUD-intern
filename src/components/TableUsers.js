@@ -18,6 +18,7 @@ const TableUsers = (props)=>{
     const[dataUserDelete,setDataUserDelete] = useState({})
     const[sortBy, setSortBy] = useState('asc')
     const[sortField,setSortField] = useState('id')
+    const[searchKeyWord,setSearchKeyWord] =useState('')
 
 
 
@@ -94,14 +95,35 @@ const TableUsers = (props)=>{
           let newListUser = listUser.sortBy(sortField,sortBy);
           setListUser(newListUser)
     }
-    
+    const handleSearch=(event)=>{
+        let term = event.target.value
+        if(term){
+            let newListUser = listUser.filter(item=>{
+                if(item.email.includes(term)){
+                    console.log('kkk');
+                    return item
+                }
+            })
+            setListUser(newListUser)
+        }
+        else{
+            getUser(1)
+        }
+    }
+
     return(
         <>
         <div className='my-3 d-flex justify-content-between'>
             <span><b>List user</b></span>
             <button onClick={()=>{setIsShowModalAddNew(true)}} className='btn btn-success'>Add new user</button>
         </div>
-
+        <div className='col-4 my-3'>
+            <input 
+            className='form-control' 
+            placeholder='Search by email...'
+            onChange={(event)=>handleSearch(event)}
+            />
+        </div>
         <Table striped bordered hover>
             <thead>
                 <tr>
