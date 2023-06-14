@@ -16,6 +16,8 @@ const TableUsers = (props)=>{
     const[isShowModalDelete, setIsShowModalDelete] = useState(false)
     const[dataUserEdit,setDataUserEdit] = useState({})
     const[dataUserDelete,setDataUserDelete] = useState({})
+    const[sortBy, setSortBy] = useState('asc')
+    const[sortField,setSortField] = useState('id')
 
 
 
@@ -74,6 +76,25 @@ const TableUsers = (props)=>{
     const handlePageClick = (event)=>{
         getUser(+event.selected +1)
     }
+
+    const handleSort = (sortBy,sortField)=>{
+        setSortBy(sortBy);
+        setSortField(sortField);
+        Array.prototype.sortBy = function(p,by) {
+            return this.slice(0).sort(function(a,b) {
+                if(by==='asc'){
+                    return (a[p] < b[p]) ? 1 : (a[p] > b[p]) ? -1 : 0;
+                }
+                else{
+                    return (a[p] > b[p]) ? 1 : (a[p] < b[p]) ? -1 : 0;
+                }
+            });
+          }
+    
+          let newListUser = listUser.sortBy(sortField,sortBy);
+          setListUser(newListUser)
+    }
+    
     return(
         <>
         <div className='my-3 d-flex justify-content-between'>
@@ -84,9 +105,35 @@ const TableUsers = (props)=>{
         <Table striped bordered hover>
             <thead>
                 <tr>
-                <th>ID</th>
+                <th>
+                    <div className='d-flex justify-content-between cursor-pointer' role="button">
+                    <span>ID</span>
+                    <span  className='d-flex gap-2'>
+                        <i 
+                        onClick={()=>handleSort('desc','id')}
+                        className="fa-solid fa-arrow-up-wide-short"></i>
+                        <i 
+                        onClick={()=>handleSort('asc','id')}
+                        className="fa-solid fa-arrow-down-wide-short"></i>
+
+                    </span>
+                    </div>
+                </th>
                 <th>Email</th>
-                <th>First Name</th>
+                <th>
+                <div className='d-flex justify-content-between cursor-pointer' role="button">
+                    <span>First Name</span>
+                    <span  className='d-flex gap-2'>
+                        <i 
+                        onClick={()=>handleSort('desc','first_name')}
+                        className="fa-solid fa-arrow-up-wide-short"></i>
+                        <i 
+                        onClick={()=>handleSort('asc','first_name')}
+                        className="fa-solid fa-arrow-down-wide-short"></i>
+
+                    </span>
+                    </div>
+                </th>
                 <th>Last Name</th>
                 <th>Actions</th>
                 </tr>
