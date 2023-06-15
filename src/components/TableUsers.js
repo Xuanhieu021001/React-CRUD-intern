@@ -7,6 +7,7 @@ import ModalEditUser from './ModalEditUser';
 import ModalDeleteUser from './ModalDeleteUser';
 import { toast } from 'react-toastify';
 import { CSVLink, CSVDownload } from "react-csv";
+import Papa from 'papaparse'
 
 const TableUsers = (props)=>{   
     const[listUser,setListUser] = useState([])
@@ -128,11 +129,56 @@ const TableUsers = (props)=>{
                 arr[1] = item.email
                 arr[2] = item.first_name
                 arr[3] = item.last_name
-                result.push(arr)
+                result.push(arr)  
             })
             setDataExport(result);
             done()
           }
+      }
+
+      const handleExportCsv=(event)=>{
+        if(event.target&& event.target.files && event.target.files[0]){
+            let file = event.target.files[0]
+            if(file.type!=='text/csv'){
+                toast.error('only accept csv file')
+                return 
+            }
+            Papa.parse(file,{
+                complete: function(results){
+                    let rawCSV = results.data
+                    if(rawCSV.length>0){
+                        if(rawCSV[0]&&rawCSV[0].length===3){
+                            if(rawCSV[0][0]!=='email'
+                            ||rawCSV[0][1]!=='first_name'
+                            ||rawCSV[0][2]!=='last_name'){
+                                toast.error('Wrong format header CSV file')
+                            }
+                            else{
+                                let results =[]
+                                rawCSV.map((item,index)=>{
+                                    if(index>0 && item.length===3){
+                                        let obj={};
+                                        obj.email = item[0]
+                                        obj.first_name = item[1]
+                                        obj.last_name = item[2]
+                                        results.push(obj)
+                                    }
+                                })
+                                console.log(results);
+                                setListUser(results)
+                            }
+                        }
+                        else{
+                            toast.error('Wrong format CSV file')
+                        }
+                    }
+                    else{
+                        toast.error('not found data on your CSV file')
+                    }
+                    // console.log('finished', results.data);
+                }
+            })
+        }
       }
 
     return(
@@ -140,16 +186,16 @@ const TableUsers = (props)=>{
         <div className='my-3 d-flex justify-content-between'>
             <span><b>List user</b></span>
             <div className='d-flex gap-2'>
-                <label htmlFor='import' className='btn btn-warning'><i class="fa-solid fa-file-arrow-down " role='button'></i> Import</label>
-                <input id='import' type='file' hidden />
+                <label htmlFor='import' className='btn btn-warning'><i className="fa-solid fa-file-arrow-down " role='button'></i> Import</label>
+                <input id='import' type='file' hidden  onChange={(event)=>{handleExportCsv(event)}}/>
                 <CSVLink
                 filename={"my-file.csv"}
                 className="btn btn-primary"
                 data ={dataExport}
                 asyncOnClick={true}
                 onClick={getUserExport}
-                ><i class="fa-solid fa-file-arrow-down"></i> Export</CSVLink>
-                <button onClick={()=>{setIsShowModalAddNew(true)}} className='btn btn-success'> <i class="fa-solid fa-circle-plus"></i> Add user</button>
+                ><i className="fa-solid fa-file-arrow-down"></i> Export</CSVLink>
+                <button onClick={()=>{setIsShowModalAddNew(true)}} className='btn btn-success'> <i className="fa-solid fa-circle-plus"></i> Add user</button>
             </div>
         </div>
         <div className='col-4 my-3'>
