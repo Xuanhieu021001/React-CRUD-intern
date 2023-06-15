@@ -1,16 +1,22 @@
+import { Routes,Route } from 'react-router-dom';
 import './App.scss';
 import Header from './components/Header';
 import TableUsers from './components/TableUsers';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import Home from './components/Home';
+
 
 function App() {
   
   return (
     <div className='app-container'>
       <Header/>
+      <Routes>
+        <Route path='/' element={<Home />}></Route>
+        <Route path='/users' element={ <TableUsers/> }></Route>
+      </Routes>
       
-      <TableUsers/>
-      
+     
 
       <ToastContainer
         position="top-right"
