@@ -6,6 +6,7 @@ import ModalAddNew from './ModalAddNew';
 import ModalEditUser from './ModalEditUser';
 import ModalDeleteUser from './ModalDeleteUser';
 import { toast } from 'react-toastify';
+import { CSVLink, CSVDownload } from "react-csv";
 
 const TableUsers = (props)=>{   
     const[listUser,setListUser] = useState([])
@@ -19,7 +20,7 @@ const TableUsers = (props)=>{
     const[sortBy, setSortBy] = useState('asc')
     const[sortField,setSortField] = useState('id')
     const[searchKeyWord,setSearchKeyWord] =useState('')
-
+    const[dataExport,setDataExport] = useState([])
 
 
     const handleClose = ()=>{
@@ -110,12 +111,46 @@ const TableUsers = (props)=>{
             getUser(1)
         }
     }
+    const csvData = [
+        ["firstname", "lastname", "email"],
+        ["Ahmed", "Tomi", "ah@smthing.co.com"],
+        ["Raed", "Labes", "rl@smthing.co.com"],
+        ["Yezzi", "Min l3b", "ymin@cocococo.com"]
+      ];
+
+      const getUserExport=(event,done)=>{
+          let result = []
+          if(listUser&& listUser.length>0){
+              result.push(['ID','Email','First name','Last name'])
+              listUser.map((item,index)=>{
+                let arr =[]
+                arr[0] = item.id
+                arr[1] = item.email
+                arr[2] = item.first_name
+                arr[3] = item.last_name
+                result.push(arr)
+            })
+            setDataExport(result);
+            done()
+          }
+      }
 
     return(
         <>
         <div className='my-3 d-flex justify-content-between'>
             <span><b>List user</b></span>
-            <button onClick={()=>{setIsShowModalAddNew(true)}} className='btn btn-success'>Add new user</button>
+            <div className='d-flex gap-2'>
+                <label htmlFor='import' className='btn btn-warning'><i class="fa-solid fa-file-arrow-down " role='button'></i> Import</label>
+                <input id='import' type='file' hidden />
+                <CSVLink
+                filename={"my-file.csv"}
+                className="btn btn-primary"
+                data ={dataExport}
+                asyncOnClick={true}
+                onClick={getUserExport}
+                ><i class="fa-solid fa-file-arrow-down"></i> Export</CSVLink>
+                <button onClick={()=>{setIsShowModalAddNew(true)}} className='btn btn-success'> <i class="fa-solid fa-circle-plus"></i> Add user</button>
+            </div>
         </div>
         <div className='col-4 my-3'>
             <input 
