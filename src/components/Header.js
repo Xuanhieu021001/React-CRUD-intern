@@ -2,8 +2,15 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import {NavLink } from 'react-router-dom';
+import {NavLink, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const Header = (props)=>{
+  const navigate = useNavigate()
+  const handleLogout=()=>{
+    localStorage.removeItem('token')
+    navigate('/')
+    toast.success('Đăng xuất thành công!')
+  }
     return(
         <>
         <Navbar bg="light" expand="lg">
@@ -17,9 +24,9 @@ const Header = (props)=>{
           </Nav>
           <Nav>
               <NavDropdown title="Setting" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/login">Login</NavDropdown.Item>
+                <NavLink to="/login" className='dropdown-item'>Login</NavLink>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="/logout">Logout</NavDropdown.Item>
+                <NavLink onClick={()=>handleLogout()} className='dropdown-item'>Logout</NavLink>
               </NavDropdown>
           </Nav>
         </Navbar.Collapse>

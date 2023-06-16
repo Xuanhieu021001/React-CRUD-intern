@@ -4,6 +4,7 @@ import Header from './components/Header';
 import TableUsers from './components/TableUsers';
 import { ToastContainer } from 'react-toastify';
 import Home from './components/Home';
+import Login from './components/Login';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />}></Route>
         <Route path='/users' element={ <TableUsers/> }></Route>
+        <Route path='/login' element={ <Login/> }></Route>
       </Routes>
       
      
