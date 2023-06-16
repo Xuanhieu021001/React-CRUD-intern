@@ -5,10 +5,18 @@ import TableUsers from './components/TableUsers';
 import { ToastContainer } from 'react-toastify';
 import Home from './components/Home';
 import Login from './components/Login';
+import { useContext, useEffect } from 'react';
+import { UserContext } from './context/userContext';
 
 
 function App() {
-  
+  const {user,login} = useContext(UserContext)
+  // console.log(user);
+  useEffect(()=>{
+    if(localStorage.getItem('token')){
+      login(localStorage.getItem('email'),localStorage.getItem('token'))
+    }
+  })
   return (
     <div className='app-container'>
       <Header/>

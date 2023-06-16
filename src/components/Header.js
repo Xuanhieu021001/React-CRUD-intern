@@ -4,11 +4,17 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useContext, useEffect } from 'react';
+import { UserContext } from '../context/userContext';
+
+
 const Header = (props)=>{
+  const{logout,user} = useContext(UserContext)
+  console.log(user);
   const navigate = useNavigate()
   const handleLogout=()=>{
-    localStorage.removeItem('token')
-    navigate('/')
+    logout();
+    navigate('/');
     toast.success('Đăng xuất thành công!')
   }
     return(
@@ -18,17 +24,25 @@ const Header = (props)=>{
         <Navbar.Brand href="#home">My App</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+          {(user && user.auth|| window.location.pathname==='/')&&
+          <>
+            <Nav className="me-auto">
             <NavLink to="/" className='nav-link'>Home</NavLink>
             <NavLink to="/users" className='nav-link'>Manage users</NavLink>
-          </Nav>
-          <Nav>
-              <NavDropdown title="Setting" id="basic-nav-dropdown">
-                <NavLink to="/login" className='dropdown-item'>Login</NavLink>
-                <NavDropdown.Divider />
-                <NavLink onClick={()=>handleLogout()} className='dropdown-item'>Logout</NavLink>
-              </NavDropdown>
-          </Nav>
+            </Nav>
+            <Nav> 
+              {user&& user.email&& <span className='nav-link'>Well come: {user.email}</span>}
+                <NavDropdown title="Setting" id="basic-nav-dropdown">
+                  {user&& user.auth === true?<NavLink onClick={()=>handleLogout()} className='dropdown-item'>Logout</NavLink>
+                  : <NavLink to="/login" className='dropdown-item'>Login</NavLink>
+                  }
+                  {/* <NavDropdown.Divider /> */}
+                  
+                </NavDropdown>
+            </Nav>
+          </>
+          }
+          
         </Navbar.Collapse>
       </Container>
     </Navbar>

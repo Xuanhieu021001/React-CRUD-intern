@@ -1,8 +1,11 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState,useContext } from "react"
 import { loginUser } from "../services/UserService"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import { UserContext } from "../context/userContext"
+
 const Login =()=>{
+    const {user, login} = useContext(UserContext)
     const navigate = useNavigate()
     const[email,setEmail] = useState('')
     const[passWord,setPassWord] = useState('')
@@ -12,10 +15,10 @@ const Login =()=>{
     const emailRef = useRef()
     useEffect(()=>{
         emailRef.current.focus()
-        let token = localStorage.getItem('token')
-        if(token){
-            navigate('/')
-        }
+        // let token = localStorage.getItem('token')
+        // if(token){
+        //     navigate('/')
+        // }
     },[])
 
     const handleLogin= async(email,passWord)=>{
@@ -28,6 +31,7 @@ const Login =()=>{
         if(res&& res.token){
             localStorage.setItem("token",res.token)
             navigate('/')
+            login(email)
         }
         else{
             if(res&& res.status===400){
@@ -36,6 +40,9 @@ const Login =()=>{
         }
         setIsShowLoading(false)
 
+    }
+    const handleBack =()=>{
+        navigate('/')
     }
     return (
         <>
@@ -70,9 +77,11 @@ const Login =()=>{
                     disabled={email&& passWord &&!isShowLoading? false:true}
                     onClick={()=>handleLogin(email,passWord)}
                 >
-                    {isShowLoading ? <i class="fa-solid fa-spinner fa-spin"></i>: 'Login'} 
+                    {isShowLoading ? <i className="fa-solid fa-spinner fa-spin"></i>: 'Login'} 
                 </button>
-                <div className="login-back"><i className="icon-login_back fa-solid fa-caret-left"></i>Go back</div>
+                <div className="login-back"><i className="icon-login_back fa-solid fa-caret-left"></i>
+                    <span onClick={()=>handleBack()}>&nbsp; Go back</span>
+                </div>
             </div>
         </>
     )
