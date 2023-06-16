@@ -1,7 +1,6 @@
 import {createContext, useState } from "react"
 import { useNavigate } from "react-router-dom";
 const UserContext = createContext()
-
 const UserProvider = ({children})=>{
     const [user,setUser]= useState({email:'',auth:false});
     const login =(email,token)=>{
