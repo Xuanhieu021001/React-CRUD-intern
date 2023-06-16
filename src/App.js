@@ -14,7 +14,7 @@ function App() {
     if(localStorage.getItem('token')){
       login(localStorage.getItem('email'),localStorage.getItem('token'))
     }
-  })
+  },[])
   return (
     <div className='app-container'>
       <Header/>

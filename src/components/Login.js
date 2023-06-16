@@ -27,7 +27,7 @@ const Login =()=>{
             return;
         }
         setIsShowLoading(true)
-        let res = await loginUser(email,passWord)
+        let res = await loginUser(email.trim(),passWord)
         if(res&& res.token){
             localStorage.setItem("token",res.token)
             navigate('/')
@@ -43,6 +43,12 @@ const Login =()=>{
     }
     const handleBack =()=>{
         navigate('/')
+    }
+
+    const handleEnter =(event)=>{
+        if(event.key==="Enter"){
+            handleLogin(email,passWord)
+        }
     }
     return (
         <>
@@ -64,6 +70,7 @@ const Login =()=>{
                         placeholder="Password..." 
                         value={passWord}
                         onChange={(event)=>setPassWord(event.target.value)}
+                        onKeyUp={(event)=>{handleEnter(event)}}
                         
                     />
                     <i 

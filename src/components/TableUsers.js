@@ -183,9 +183,9 @@ const TableUsers = (props)=>{
 
     return(
         <>
-        <div className='my-3 d-flex justify-content-between'>
+        <div className='my-3 d-sm-flex justify-content-between'>
             <span><b>List user</b></span>
-            <div className='d-flex gap-2'>
+            <div className='d-flex gap-2 mt-sm-0 mt-2'>
                 <label htmlFor='import' className='btn btn-warning'><i className="fa-solid fa-file-arrow-down " role='button'></i> Import</label>
                 <input id='import' type='file' hidden  onChange={(event)=>{handleExportCsv(event)}}/>
                 <CSVLink
@@ -198,13 +198,14 @@ const TableUsers = (props)=>{
                 <button onClick={()=>{setIsShowModalAddNew(true)}} className='btn btn-success'> <i className="fa-solid fa-circle-plus"></i> Add user</button>
             </div>
         </div>
-        <div className='col-4 my-3'>
+        <div className='col-sm-4 col-12 my-3'>
             <input 
             className='form-control' 
             placeholder='Search by email...'
             onChange={(event)=>handleSearch(event)}
             />
         </div>
+        <div className="table-container overflow-auto">
         <Table striped bordered hover>
             <thead>
                 <tr>
@@ -251,7 +252,7 @@ const TableUsers = (props)=>{
                                 <td>{user.first_name}</td>
                                 <td>{user.last_name}</td>
                                 <td>
-                                    <button className='btn btn-warning mx-3' onClick={()=>handleEditUser(user)}>Edit</button>
+                                    <button className='btn btn-warning mx-3 mb-2 mb-sm-0' onClick={()=>handleEditUser(user)}>Edit</button>
                                     <button className='btn btn-danger' onClick={()=>handleDeleteUser(user)}>Delete</button>
                                 </td>
                             </tr>
@@ -260,7 +261,9 @@ const TableUsers = (props)=>{
                 }
             </tbody>
         </Table>
+        </div>
         <ReactPaginate
+            className='pagination justify-content-center'
             breakLabel="..."
             nextLabel="next >"
             onPageChange={handlePageClick}
