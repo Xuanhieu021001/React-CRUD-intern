@@ -3,6 +3,7 @@ import TableUsers from '../components/TableUsers';
 import Home from '../components/Home';
 import Login from '../components/Login';
 import PrivateRoutes from './PrivateRoutes';
+import Page404 from '../components/Page404';
 const AppRoutes = ()=>{
     return(
         <>
@@ -13,7 +14,9 @@ const AppRoutes = ()=>{
                 <PrivateRoutes>
                     <TableUsers/>
                 </PrivateRoutes>
-            }></Route>
+                }>
+            </Route>
+            <Route path='*' element={ <Page404/> }></Route>
         </Routes>
         </>
     )

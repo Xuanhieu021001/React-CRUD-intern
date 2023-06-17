@@ -4,18 +4,25 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useContext, useEffect } from 'react';
+import { useContext,useEffect,useState } from 'react';
 import { UserContext } from '../context/userContext';
 
 
 const Header = (props)=>{
   const{logout,user} = useContext(UserContext)
+  const [logged, setLogged] = useState(null);
+
   const navigate = useNavigate()
   const handleLogout=()=>{
+    setLogged(Math.random());
     logout();
-    navigate('/');
     toast.success('Đăng xuất thành công!')
   }
+  
+  // nếu đăng xuất thì sẽ thay đổi biến logged và trở về trang home
+  useEffect(() => {
+    navigate("/");
+  }, [logged]);
     return(
         <>
         <Navbar bg="light" expand="lg">
@@ -28,7 +35,8 @@ const Header = (props)=>{
           {(user && user.auth|| window.location.pathname==='/')&&
             <Nav className="me-auto">
             <NavLink to="/" className='nav-link'>Home</NavLink>
-            <NavLink to="/users" className='nav-link'>Manage users</NavLink>
+            {user && user.auth && <NavLink to="/users" className='nav-link'>Manage users</NavLink>}
+            
             </Nav>}
           {/* dòng này để tách setting nhảy sang bên phải */}
             <Nav className='me-auto'></Nav>
