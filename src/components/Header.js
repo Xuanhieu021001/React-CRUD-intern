@@ -4,19 +4,20 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useContext,useEffect,useState } from 'react';
-import { UserContext } from '../context/userContext';
+import { useEffect,useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleLogoutRedux } from '../redux/actions/userAction';
 
 
 const Header = (props)=>{
-  const{logout,user} = useContext(UserContext)
   const [logged, setLogged] = useState(null);
+  const user = useSelector(state=>state.user.account)
+  const dispath = useDispatch()
 
   const navigate = useNavigate()
   const handleLogout=()=>{
     setLogged(Math.random());
-    logout();
-    toast.success('Đăng xuất thành công!')
+    dispath(handleLogoutRedux())
   }
   
   // nếu đăng xuất thì sẽ thay đổi biến logged và trở về trang home

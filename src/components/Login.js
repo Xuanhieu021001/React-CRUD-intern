@@ -1,45 +1,37 @@
-import { useEffect, useRef, useState,useContext } from "react"
-import { loginUser } from "../services/UserService"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
-import { UserContext } from "../context/userContext"
+import { useDispatch, useSelector } from "react-redux"
+import { handleLoginRedux } from "../redux/actions/userAction"
 
 const Login =()=>{
-    const {user, login} = useContext(UserContext)
+    const dispath = useDispatch()
     const navigate = useNavigate()
+    const account = useSelector(state=>state.user.account)
+    
     const[email,setEmail] = useState('')
     const[passWord,setPassWord] = useState('')
     const[isShowPassWord,setIsShowPassWord] = useState(false)
-    const[isShowLoading,setIsShowLoading] =useState(false)
+
+    const isShowLoading = useSelector(state=> state.user.isLoading)
 
     const emailRef = useRef()
     useEffect(()=>{
         emailRef.current.focus()
-        // let token = localStorage.getItem('token')
-        // if(token){
-        //     navigate('/')
-        // }
     },[])
+
+    useEffect(()=>{
+        if(account && account.auth === true){
+            navigate('/')
+        }
+    },[account])
 
     const handleLogin= async(email,passWord)=>{
         if(!email|| !passWord){
             toast.error('Missing email or password!')
             return;
         }
-        setIsShowLoading(true)
-        let res = await loginUser(email.trim(),passWord)
-        if(res&& res.token){
-            localStorage.setItem("token",res.token)
-            navigate('/')
-            login(email)
-        }
-        else{
-            if(res&& res.status===400){
-                toast.error(res.data.error)
-            }
-        }
-        setIsShowLoading(false)
-
+        dispath(handleLoginRedux(email,passWord))
     }
     const handleBack =()=>{
         navigate('/')
